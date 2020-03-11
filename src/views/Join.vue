@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <h1>Hello</h1>
-    <a href="./join">Join</a>
+    <h1>Join</h1>
+    <a href="./">Home</a>
   </div>
 </template>
 
