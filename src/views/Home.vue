@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h1>Hello</h1>
-    <a href="./join">Join</a>
+    <router-link to="/join">Join</router-link>
   </div>
 </template>
 
