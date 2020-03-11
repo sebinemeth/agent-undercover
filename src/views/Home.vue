@@ -1,17 +1,19 @@
 <template>
-  <div class="home">
-    <h1>Hello</h1>
-    <router-link to="/join">Join</router-link>
+  <div class="container">
+    <h1>Home</h1>
+    <ul>
+      <li>
+        <router-link to="/join">Join</router-link>
+      </li>
+      <li>
+        <router-link to="/create">Create</router-link>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-// import firebase from "firebase";
-// @ is an alias to /src
 export default {
-  name: "home",
-  methods: {
-    
-  }
+  name: "Home"
 };
 </script>

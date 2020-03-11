@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <h1>Join</h1>
-    <router-link to="/">Home</router-link>
+    <h1>Not Found</h1>
+    <router-link to="/">Back to Home</router-link>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 // import firebase from "firebase";
 // @ is an alias to /src
 export default {
-  name: "Join",
+  name: "NotFound",
   methods: {}
 };
 </script>
