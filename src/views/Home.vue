@@ -1,19 +1,17 @@
 <template>
-  <div class="container">
-    <h1>Home</h1>
-    <ul>
-      <li>
-        <router-link to="/join">Join</router-link>
-      </li>
-      <li>
-        <router-link to="/create">Create</router-link>
-      </li>
-    </ul>
-  </div>
+  <v-container>
+    <h1>Welcome!</h1>
+  </v-container>
 </template>
 
 <script>
+const firebase = require("firebase");
+// Required for side-effects
+require("firebase/firestore");
 export default {
-  name: "Home"
+  name: "Home",
+  data: () => ({}),
+  methods: {
+  }
 };
 </script>
