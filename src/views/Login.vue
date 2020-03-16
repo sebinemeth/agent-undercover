@@ -1,12 +1,31 @@
 <template>
   <div class="container">
-    <div class="headline">Bejelentkezés</div>
     <v-row>
-      <v-col md-6>
-        <v-btn @click="googleLogin">Google</v-btn>
+      <v-col xs="12" sm="12" md="12" lg="6">
+        <v-card class="mx-auto">
+          <v-card-title class="headline mb-3">
+            <v-icon class="mr-2">mdi-google</v-icon>Google bejelentkezés
+          </v-card-title>
+          <v-card-subtitle>Az alkalmazás hozzáférést kap a Google-fiókod egyedi azonosítójához, az emailcímedhez és a nevedhez. Az alkalmazás helyes működése érdekében ezt a lehetőséget ajánljuk.</v-card-subtitle>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn text @click="googleLogin">bejelentkezés</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+      <v-col xs="12" sm="12" md="12" lg="6">
+        <v-card class="mx-auto">
+          <v-card-title class="headline mb-3">
+            <v-icon class="mr-2">mdi-account</v-icon>Névtelen bejelentkezés
+          </v-card-title>
+          <v-card-subtitle>Az alkalmazás nem fér hozzá semmilyen személyes adatodhoz, minden bejelentkezésnél meg kell adnod egy nevet, amit a játékban használni szeretnél. A teljes játékélmény érdekében nem ajánljuk ezt a lehetőséget.</v-card-subtitle>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn text @click="anonymLogin">bejelentkezés</v-btn>
+          </v-card-actions>
+        </v-card>
       </v-col>
     </v-row>
-    <v-btn @click="anonymLogin">Anonym</v-btn>
   </div>
 </template>
 
@@ -16,16 +35,16 @@ import firebase from "firebase";
 // @ is an alias to /src
 export default {
   name: "Login",
+  props: ["user"],
   data: () => ({
-    drawer: null
+    drawer: null,
+    fallback: "home"
   }),
   mounted() {
-    this.redirect();
+    firebase.auth().onAuthStateChanged(this.redirect);
   },
   methods: {
-    async redirect() {
-      var user = await firebase.auth().currentUser;
-      console.log(user)
+    redirect(user) {
       if (user) this.$router.replace("home");
     },
     googleLogin() {
@@ -48,15 +67,8 @@ export default {
         }
         var user = result.user;
         console.log("logged in", method ? "with " + method : "anonymously");
-        this.$router.replace("home");
       } catch (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
+        alert(error.message)
         console.log(error);
       }
     }

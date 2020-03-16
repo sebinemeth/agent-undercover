@@ -1,37 +1,72 @@
 <template>
   <v-app>
+    <v-overlay :value="user === undefined">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
         <v-list-item link>
           <v-list-item-action>
-            <v-icon>mdi-view-dashboard</v-icon>
+            <v-icon>mdi-plus</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Dashboard</v-list-item-title>
+            <v-list-item-title>Új játék</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link>
           <v-list-item-action>
-            <v-icon>mdi-settings</v-icon>
+            <v-icon>mdi-account-group</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Settings</v-list-item-title>
+            <v-list-item-title>Csatlakozás</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link>
+          <v-list-item-action>
+            <v-icon>mdi-help</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Útmutató</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <template v-slot:append>
+        <v-footer>
+          <v-col class="text-center overline" cols="12">
+            {{ new Date().getFullYear() }} —
+            <span>nemethsebi</span>
+          </v-col>
+        </v-footer>
+      </template>
     </v-navigation-drawer>
 
     <v-app-bar app clipped-left>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title class="orbitron">Agent Undercover</v-toolbar-title>
-      <v-spacer/>
+      <v-spacer />
       <template v-if="user">
-        <template v-if="!user.isAnonymous">
-          <v-avatar size="36" class="mx-3"><img :src="user.photoURL"></v-avatar>
-        </template>
-        <v-btn text @click="signOut">kilépés</v-btn>
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn text v-on="on" class="ma-2">
+              <template v-if="!user.isAnonymous">
+                {{firstName}}
+                <v-avatar size="28" class="ml-2">
+                  <img :src="user.photoURL" />
+                </v-avatar>
+              </template>
+              <template v-else>
+                névtelen
+                <v-icon class="ml-2">mdi-account</v-icon>
+              </template>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item @click="signOut">
+              <v-list-item-title>Kijelentkezés</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </template>
-
     </v-app-bar>
 
     <v-content>
@@ -39,10 +74,6 @@
         <router-view :user="user" />
       </v-container>
     </v-content>
-
-    <v-footer app>
-      <span>&copy; 2019</span>
-    </v-footer>
   </v-app>
 </template>
 
@@ -55,9 +86,13 @@ export default {
 
   data: () => ({
     drawer: null,
-    user: null
+    user: undefined
   }),
   computed: {
+    firstName() {
+      if (!this.user || this.user.isAnonymous) return null;
+      return this.user.displayName.split(" ")[0];
+    }
   },
   mounted() {
     this.$vuetify.theme.dark = true;
@@ -68,11 +103,11 @@ export default {
       if (user) {
         // var isAnonymous = user.isAnonymous;
         // var uid = user.uid;
-        this.user = user
+        this.user = user;
       } else {
-        this.user = null
+        this.user = null;
       }
-      console.log(this.user)
+      console.log(this.user);
     },
     async signOut() {
       var res = await firebase.auth().signOut();
@@ -81,8 +116,12 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style>
 .orbitron {
-  font-family: "Orbitron", sans-serif;
+  font-family: "Orbitron", sans-serif !important;
+}
+.o-headline {
+  font-family: "Orbitron", sans-serif !important;
+  font-size: 2em;
 }
 </style>
