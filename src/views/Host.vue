@@ -11,7 +11,7 @@ export default {
   name: "Host",
   data: () => ({}),
   mounted() {
-    console.log("params",this.$route.params)
+    console.log(this.$route.params)
   },
   methods: {}
 };
