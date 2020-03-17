@@ -5,6 +5,7 @@ import Router from 'vue-router';
 import Home from '@/views/Home';
 import Login from '@/views/Login';
 import Host from '@/views/Host';
+import Edit from '@/views/Edit';
 
 Vue.use(Router);
 
@@ -35,6 +36,14 @@ const router = new Router({
       path: '/host/:gameId',
       name: 'Host',
       component: Host,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/edit',
+      name: 'Edit',
+      component: Edit,
       meta: {
         requiresAuth: true,
       }

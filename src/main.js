@@ -12,7 +12,6 @@ const firebaseConfig = {
   apiKey: "AIzaSyBVbvkt6sA18SrYHz15YDZl5IoviGTZ920",
   authDomain: "agent-undercover.firebaseapp.com",
   databaseURL: "https://agent-undercover.firebaseio.com",
-  //databaseURL: "localhost:5555",
   projectId: "agent-undercover",
   storageBucket: "agent-undercover.appspot.com",
   messagingSenderId: "744074168072",

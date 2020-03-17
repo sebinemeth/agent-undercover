@@ -36,12 +36,12 @@
         <v-card>
           <v-card-actions>
             <v-spacer />
-            <v-btn color="primary" :disabled="game.data().full" @click="stepper = 2">Continue</v-btn>
+            <v-btn color="primary" :disabled="game.data().full" @click="stepper = 2">folytatás</v-btn>
           </v-card-actions>
         </v-card>
       </v-stepper-content>
 
-      <v-stepper-step :complete="stepper > 2" step="2">Configure analytics for this app</v-stepper-step>
+      <v-stepper-step :complete="stepper > 2" step="2">Offline játékosok hozzáadása</v-stepper-step>
 
       <v-stepper-content step="2">
         <v-card color="grey lighten-1" class="mb-12" height="200px"></v-card>
@@ -49,7 +49,7 @@
         <v-btn text>Cancel</v-btn>
       </v-stepper-content>
 
-      <v-stepper-step :complete="stepper > 3" step="3">Select an ad format and name ad unit</v-stepper-step>
+      <v-stepper-step :complete="stepper > 3" step="3">Játékindítás</v-stepper-step>
 
       <v-stepper-content step="3">
         <v-card color="grey lighten-1" class="mb-12" height="200px"></v-card>
@@ -57,12 +57,6 @@
         <v-btn text>Cancel</v-btn>
       </v-stepper-content>
 
-      <v-stepper-step step="4">View setup instructions</v-stepper-step>
-      <v-stepper-content step="4">
-        <v-card color="grey lighten-1" class="mb-12" height="200px"></v-card>
-        <v-btn color="primary" @click="stepper = 1">Continue</v-btn>
-        <v-btn text>Cancel</v-btn>
-      </v-stepper-content>
     </v-stepper>
     <v-snackbar v-model="snackbar.open">
       {{ snackbar.text }}
@@ -121,7 +115,7 @@ export default {
     async share() {
       await navigator.share({
         title: "Agent Undercover játékmeghívás",
-        text: "Csatlakozz a játékhoz!",
+        text: "Csatlakozz a játékhoz!\n",
         url: "https://agent-undercover.web.app/#/join/" + this.game.id
       });
     },

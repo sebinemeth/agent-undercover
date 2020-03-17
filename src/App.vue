@@ -5,7 +5,7 @@
     </v-overlay>
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
-        <v-list-item link>
+        <v-list-item link to="/home">
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
@@ -29,7 +29,7 @@
             <v-list-item-title>Csatlakozás</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link v-if="user && !user.isAnonymous">
+        <v-list-item link to="/edit" v-if="user && !user.isAnonymous">
           <v-list-item-action>
             <v-icon>mdi-cards</v-icon>
           </v-list-item-action>
@@ -37,7 +37,7 @@
             <v-list-item-title>Szerkesztő</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link to="/help">
           <v-list-item-action>
             <v-icon>mdi-help</v-icon>
           </v-list-item-action>
