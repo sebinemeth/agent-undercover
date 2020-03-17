@@ -37,7 +37,6 @@ const router = new Router({
       component: Host,
       meta: {
         requiresAuth: true,
-        requiresNonAnonym: true
       }
     }
   ]
@@ -48,16 +47,11 @@ router.beforeEach((to, from, next) => {
   const currentUser = firebase.auth().currentUser;
 
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  const requiresNonAnonym = to.matched.some(record => record.meta.requiresNonAnonym);
 
-  var authPass = (requiresAuth && currentUser) || !requiresAuth
-  var nonAnonymPass = (requiresNonAnonym && currentUser && !currentUser.isAnonymous) || !requiresNonAnonym
-  if (authPass && nonAnonymPass)
-    next();
-  else if (!authPass)
-    next({ path: 'login' });
+  if (requiresAuth && !currentUser)
+    next("login?callback="+to.path.substring(1));
   else
-    next('home');
+    next();
 });
 
 export default router;

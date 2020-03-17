@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     redirect(user) {
-      if (user) this.$router.replace("home");
+      if (user) this.$router.replace(this.$route.query.callback ? this.$route.query.callback : "home");
     },
     googleLogin() {
       this.login("google");

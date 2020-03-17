@@ -7,18 +7,34 @@
       <v-list dense>
         <v-list-item link>
           <v-list-item-action>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Kezdőlap</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link v-if="user && !user.isAnonymous">
+          <v-list-item-action>
             <v-icon>mdi-plus</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Új játék</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link v-if="user">
           <v-list-item-action>
             <v-icon>mdi-account-group</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Csatlakozás</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link v-if="user && !user.isAnonymous">
+          <v-list-item-action>
+            <v-icon>mdi-cards</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Szerkesztő</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link>
@@ -46,19 +62,25 @@
       <v-spacer />
       <template v-if="user">
         <v-menu offset-y>
-          <template v-slot:activator="{ on }">
-            <v-btn text v-on="on" class="ma-2">
-              <template v-if="!user.isAnonymous">
-                {{firstName}}
-                <v-avatar size="28" class="ml-2">
-                  <img :src="user.photoURL" />
-                </v-avatar>
+          <template v-slot:activator="{ on: menu }">
+            <v-tooltip left>
+              <template v-slot:activator="{ on: tooltip }">
+                <v-btn icon v-on="{ ...tooltip, ...menu }" class="ma-2">
+                  <template v-if="!user.isAnonymous">
+                    <v-avatar size="28">
+                      <img :src="user.photoURL" />
+                    </v-avatar>
+                  </template>
+                  <template v-else>
+                    <v-icon>mdi-account</v-icon>
+                  </template>
+                </v-btn>
               </template>
-              <template v-else>
-                névtelen
-                <v-icon class="ml-2">mdi-account</v-icon>
-              </template>
-            </v-btn>
+              <span>
+                <template v-if="!user.isAnonymous">{{firstName}}</template>
+                <template v-else>Névtelen</template>
+              </span>
+            </v-tooltip>
           </template>
           <v-list>
             <v-list-item @click="signOut">

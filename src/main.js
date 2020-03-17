@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
+import Clipboard from 'v-clipboard'
 import router from './router.js'
 import vuetify from './plugins/vuetify';
 import './registerServiceWorker'
 import firebase from 'firebase';
 
 let app = ''
+Vue.use(Clipboard)
 const firebaseConfig = {
   apiKey: "AIzaSyBVbvkt6sA18SrYHz15YDZl5IoviGTZ920",
   authDomain: "agent-undercover.firebaseapp.com",
