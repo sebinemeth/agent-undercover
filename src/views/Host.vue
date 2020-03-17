@@ -64,6 +64,10 @@
         <v-btn text>Cancel</v-btn>
       </v-stepper-content>
     </v-stepper>
+    <v-snackbar v-model="snackbar.open">
+      {{ snackbar.text }}
+      <v-btn color="info" icon @click="snackbar.open = false"><v-icon>mdi-close</v-icon></v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -76,6 +80,10 @@ export default {
   name: "Host",
   data: () => ({
     stepper: 1,
+    snackbar: {
+      open: false,
+      text: null
+    },
     game: null
   }),
   computed: {
@@ -116,6 +124,12 @@ export default {
         text: "Csatlakozz a játékhoz!",
         url: "https://agent-undercover.web.app/#/join/" + this.game.id
       });
+    },
+    clipboardSuccessHandler() {
+      this.snackbar = {open: true, text: "Vágólapra másolva"}
+    },
+    clipboardErrorHandler() {
+      this.snackbar = {open: true, text: "Nem sikerült a másolás"}
     }
   }
 };
