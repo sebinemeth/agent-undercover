@@ -1,8 +1,11 @@
 <template>
   <v-container>
     <div class="display-1 my-3">Paklik szerkesztése</div>
+    <v-btn color="info" @click="edit(null)">
+      <v-icon left>mdi-plus</v-icon>Új pakli
+    </v-btn>
     <div>
-      <div class="my-2">Privát paklijaid</div>
+      <div class="subtitle-2 my-2">Privát paklijaid</div>
       <v-col cols="12" sm="6" md="4" lg="3" v-for="deck in privateDecks" v-bind:key="deck.id">
         <v-card @click="edit(deck)">
           <v-card-title>{{deck.data().shortname}}</v-card-title>
@@ -18,7 +21,7 @@
       </v-col>
     </div>
     <div>
-      <div class="my-2">Nyilvános paklik</div>
+      <div class="subtitle-2 my-2">Nyilvános paklik</div>
       <v-col cols="12" sm="6" md="4" lg="3" v-for="deck in publicDecks" v-bind:key="deck.id">
         <v-card @click="edit(deck)">
           <v-card-title>{{deck.data().shortname}}</v-card-title>
@@ -42,11 +45,37 @@
         <v-card-text>
           <v-container>
             <v-row>
+              <v-col cols="12" class="subtitle-2">Pakli adatok</v-col>
               <v-col cols="12">
-                <v-text-field label="Helyszín neve" required v-model="editDialog.deck.shortName"></v-text-field>
+                <v-text-field label="Helyszín neve" v-model="editDialog.deck.shortname"></v-text-field>
               </v-col>
-              <v-col cols="12" v-for="(i, card) in editDialog.deck.cards" v-bind:key="card">
-                <v-text-field v-model="editDialog.deck.cards[i]"></v-text-field>
+              <v-col cols="12" md="6">
+                <v-switch inset v-model="editDialog.deck.public" label="Nyilvános"></v-switch>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-switch
+                  inset
+                  v-model="editDialog.deck.readOnly"
+                  label="Csak olvasható"
+                  :disabled="!editDialog.deck.public"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" class="subtitle-2">Szerepek</v-col>
+              <v-col v-for="(card, i) in editDialog.deck.cards" :key="card" class="shrink">
+                <v-chip close @click:close="editDialog.deck.cards.splice(i, 1)">
+                  <!--<v-icon left v-text="selection.icon"></v-icon>-->
+                  {{ card }}
+                </v-chip>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="editDialog.newRole"
+                  append-outer-icon="mdi-plus-circle"
+                  clearable
+                  label="Új szerep"
+                  type="text"
+                  @click:append-outer="()=>{editDialog.deck.cards.push(editDialog.newRole); editDialog.newRole = null}"
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -59,6 +88,7 @@
             text
             :loading="editDialog.loading"
             :disabled="editDialog.loading"
+            @click="saveDeck"
           >Mentés</v-btn>
         </v-card-actions>
       </v-card>
@@ -110,11 +140,32 @@ export default {
       });
     },
     edit(deck) {
+      console.log(deck);
       this.editDialog = {
         open: true,
-        deck: deck.data(),
+        deck: deck ? deck.data() : {cards: []},
+        deckId: deck ? deck.id : null
+      };
+      if (deck) console.log(deck.data());
+    },
+    async saveDeck() {
+      this.editDialog.loading = true;
+      const db = firebase.firestore();
+      var result;
+      if (!this.editDialog.deckId) {
+        console.log(this.user)
+        this.editDialog.deck.owner = {
+          uid: this.user.uid
+        }
+        result = await db.collection("decks").add(this.editDialog.deck);
+      } else {
+        var docRef = await db.collection("decks").doc(this.editDialog.deckId);
+        result = await docRef.set(this.editDialog.deck, {
+          merge: true
+        });
       }
-      console.log(deck.id);
+      console.log(result);
+      this.editDialog.open = false;
     }
   }
 };
