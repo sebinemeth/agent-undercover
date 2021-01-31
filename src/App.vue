@@ -91,11 +91,11 @@
       </template>
     </v-app-bar>
 
-    <v-content>
+    <v-main>
       <v-container class="fill-height" fluid>
         <router-view :user="user" />
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
