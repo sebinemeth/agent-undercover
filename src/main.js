@@ -22,12 +22,11 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
 firebase.auth().onAuthStateChanged(() => {
+  if (!app) {
+    app = new Vue({
+      router,
+      vuetify,
+      render: h => h(App)
+    }).$mount('#app');
+  }
 });
-if (!app) {
-  /* eslint-disable no-new */
-  app = new Vue({
-    router,
-    vuetify,
-    render: h => h(App)
-  }).$mount('#app');
-}
