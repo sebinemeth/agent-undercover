@@ -5,6 +5,7 @@ import Router from 'vue-router';
 import Home from '@/views/Home';
 import Login from '@/views/Login';
 import Host from '@/views/Host';
+import Join from '@/views/Join';
 import Edit from '@/views/Edit';
 
 Vue.use(Router);
@@ -36,6 +37,14 @@ const router = new Router({
       path: '/host/:gameId',
       name: 'Host',
       component: Host,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/join/:gameId',
+      name: 'Join',
+      component: Join,
       meta: {
         requiresAuth: true,
       }

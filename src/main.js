@@ -5,8 +5,10 @@ import router from './router.js'
 import vuetify from './plugins/vuetify';
 import './registerServiceWorker'
 import firebase from 'firebase';
+import VueTheMask from 'vue-the-mask'
 
 let app = ''
+Vue.use(VueTheMask)
 Vue.use(Clipboard)
 const firebaseConfig = {
   apiKey: "AIzaSyBVbvkt6sA18SrYHz15YDZl5IoviGTZ920",

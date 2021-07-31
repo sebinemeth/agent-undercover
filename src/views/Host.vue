@@ -34,11 +34,22 @@
 
       <v-stepper-content step="1">
         <v-card>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn color="primary" :disabled="game.data().full" @click="stepper = 2">folytatás</v-btn>
-          </v-card-actions>
+          <v-card-text>
+            <template v-if="game.data().players && game.data().players.length == 0">Nincs játékos</template>
+            <v-list-item two-line v-for="player in game.data().players" v-bind:key="player.uid">
+              <!--<v-list-item-avatar>
+                <v-img :src="player.photoURL"></v-img>
+              </v-list-item-avatar>-->
+              <v-list-item-content>
+                <v-list-item-title>{{player.displayName}}</v-list-item-title>
+                <v-list-item-subtitle>{{player.email}}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-card-text>
         </v-card>
+        <div class="my-3 d-flex flex-row justify-end">
+          <v-btn color="primary" :disabled="game.data().full" @click="stepper = 2">folytatás</v-btn>
+        </div>
       </v-stepper-content>
 
       <v-stepper-step :complete="stepper > 2" step="2">Offline játékosok hozzáadása</v-stepper-step>
@@ -56,11 +67,12 @@
         <v-btn color="primary" @click="stepper = 4">Continue</v-btn>
         <v-btn text>Cancel</v-btn>
       </v-stepper-content>
-
     </v-stepper>
     <v-snackbar v-model="snackbar.open">
       {{ snackbar.text }}
-      <v-btn color="info" icon @click="snackbar.open = false"><v-icon>mdi-close</v-icon></v-btn>
+      <v-btn color="info" icon @click="snackbar.open = false">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -72,6 +84,7 @@ require("firebase/firestore");
 const base36 = require("base36");
 export default {
   name: "Host",
+  props: ["user"],
   data: () => ({
     stepper: 1,
     snackbar: {
@@ -109,7 +122,8 @@ export default {
       }
       docRef.onSnapshot(doc => {
         this.game = doc;
-        console.log(doc.data());
+        if(this.game.data().hostUser.uid != this.user.uid)
+          this.$router.push("/home")
       });
     },
     async share() {
@@ -120,10 +134,10 @@ export default {
       });
     },
     clipboardSuccessHandler() {
-      this.snackbar = {open: true, text: "Vágólapra másolva"}
+      this.snackbar = { open: true, text: "Vágólapra másolva" };
     },
     clipboardErrorHandler() {
-      this.snackbar = {open: true, text: "Nem sikerült a másolás"}
+      this.snackbar = { open: true, text: "Nem sikerült a másolás" };
     }
   }
 };
